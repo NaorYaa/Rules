@@ -7,7 +7,7 @@ rules:
       pattern-sanitizers:
         - pattern-regex: ^.*getSquidProxyConfig.*$
         - pattern-regex: ^.*http.*$
-        - pattern-regex: ^.*editorUrl.*$
+        - pattern: fetch(editorUrl, {...})
       pattern-sinks:
         - pattern: fetch(...)
         - pattern: httpClient.$BLA(...) 
