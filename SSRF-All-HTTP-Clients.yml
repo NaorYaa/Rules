@@ -7,11 +7,22 @@ rules:
       pattern-sanitizers:
         - patterns:
           - pattern-inside: $CLIENT.$METHOD('$URL', ...)
+          - pattern-inside: $CLIENT.$METHOD(`$URL`, ...)
+          - pattern-inside: $CLIENT('$URL', ...)
+          - pattern-inside: $CLIENT(`$URL`, ...)
+          - pattern-inside: $CLIENT(`$URL`)
           - metavariable-regex:
               metavariable: $URL
               regex: \W*(http)\W*
         - patterns:
           - pattern-regex: ^.*getSquidProxyConfig.*$
+          - pattern-regex: ^.*squid.security.*$
+        - patterns:
+          - pattern-inside: |
+                  $VAR = {"$URI": "$SOMEURL", "method": "$METHOD", "proxy": "$SQUID",}
+          - metavariable-regex:
+              metavariable: $SQUID
+              regex: \W*(squid.security)\W*
       pattern-sinks:
         - pattern: fetch(...)
         - pattern: httpClient.$METHOD(...) 
