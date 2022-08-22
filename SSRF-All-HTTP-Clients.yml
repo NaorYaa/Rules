@@ -6,16 +6,18 @@ rules:
       mode: taint
       pattern-sanitizers:
         - patterns:
-          - pattern-inside: $CLIENT.$METHOD('$URL', ...)
-          - pattern-inside: $CLIENT.$METHOD(`$URL`, ...)
-          - pattern-inside: $CLIENT('$URL', ...)
-          - pattern-inside: $CLIENT(`$URL`, ...)
-          - pattern-inside: $CLIENT(`$URL`)
+          - pattern-inside: $CLIENT.$METHOD($URL, ...)
+          - metavariable-regex:
+              metavariable: $URL
+              regex: \W*(http)\W*
+        - patterns:
+          - pattern-inside: $CLIENT($URL, ...)
           - metavariable-regex:
               metavariable: $URL
               regex: \W*(http)\W*
         - patterns:
           - pattern-regex: ^.*getSquidProxyConfig.*$
+        - patterns:
           - pattern-regex: ^.*squid.security.*$
         - patterns:
           - pattern-inside: |
