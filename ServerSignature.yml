@@ -8,13 +8,13 @@ rules:
  #   pattern-sanitizers:
  #     - pattern: none
     pattern-sinks:
- #     - pattern: addServerSignature
-      - pattern: ctx.apiGatewayClient.addServerSignature(...)
-      - pattern: ctx.apiGatewayClient.signWith(...)
       - pattern: client.get($VAR, ...)
-      - pattern: req.$VAR
+      - pattern: req
     pattern-sources:
       - patterns:
         - pattern-either:
             - pattern: $VAR = await addServerSignature(...);
+            - pattern: addServerSignature
+            - pattern: ctx.apiGatewayClient.addServerSignature(...)
+            - pattern: ctx.apiGatewayClient.signWith(...)
     severity: ERROR
