@@ -1,16 +1,20 @@
 rules:
-  - id: auth_bypass_detection
-    pattern-either:
-      - patterns:
-        - pattern-inside: |
-              const $VAR = await $VULN(...);
-        - metavariable-regex:
-            metavariable: $VULN
-            regex: (addServerSignature)
-      - pattern: addServerSignature
-      - pattern: ctx.apiGatewayClient.addServerSignature(...)
-      - pattern: ctx.apiGatewayClient.signWith(...)
-    message: addServerSignature Usage Found
+  - id: taint-rule
     languages:
       - javascript
+      - typescript
+    message: addServerSignature Usage Found
+    mode: taint
+ #   pattern-sanitizers:
+ #     - pattern: none
+    pattern-sinks:
+ #     - pattern: addServerSignature
+      - pattern: ctx.apiGatewayClient.addServerSignature(...)
+      - pattern: ctx.apiGatewayClient.signWith(...)
+      - pattern: client.get($VAR, ...)
+      - pattern: req.$VAR
+    pattern-sources:
+      - patterns:
+        - pattern-either:
+            - pattern: $VAR = await addServerSignature(...);
     severity: ERROR
